@@ -1,4 +1,6 @@
 <?php
+require_once 'config/auth.php';
+require_role('admin');
 require_once 'config/db_config.php';
 
 // 获取所有在职员工
