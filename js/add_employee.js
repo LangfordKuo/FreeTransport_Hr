@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // 表单验证
-        if (!formData.employee_number || !formData.name || !formData.qq_number || !formData.truckers_mp_id) {
-            showError('所有字段都是必填的');
+        if (!formData.name || !formData.qq_number || !formData.truckers_mp_id) {
+            showError('姓名、QQ号码和TruckersMP ID是必填项');
             return;
         }
 
@@ -25,6 +25,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!/^\d{5,11}$/.test(formData.qq_number)) {
             showError('QQ号码格式不正确');
             return;
+        }
+
+        // 如果填写了员工编号，验证格式
+        if (formData.employee_number) {
+            // 验证是否为纯数字
+            if (!/^\d+$/.test(formData.employee_number)) {
+                showError('员工编号必须是纯数字');
+                return;
+            }
+            
+            // 验证数字范围
+            const numValue = parseInt(formData.employee_number);
+            if (numValue <= 0) {
+                showError('员工编号必须大于0');
+                return;
+            }
         }
 
         try {

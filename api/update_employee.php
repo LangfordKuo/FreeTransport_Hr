@@ -1,5 +1,6 @@
 <?php
 require_once '../config/db_config.php';
+require_once '../config/auth.php';
 
 header('Content-Type: application/json');
 
