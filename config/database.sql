@@ -1,0 +1,25 @@
+CREATE DATABASE IF NOT EXISTS freetransport_hr DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE freetransport_hr;
+
+CREATE TABLE IF NOT EXISTS employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_number VARCHAR(20) NOT NULL UNIQUE COMMENT '员工编号',
+    name VARCHAR(50) NOT NULL COMMENT '姓名',
+    qq_number VARCHAR(20) NOT NULL COMMENT 'QQ号码',
+    truckers_mp_id VARCHAR(20) NOT NULL COMMENT 'TruckersMP ID',
+    join_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '入职时间',
+    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active' COMMENT '在职状态',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS employee_status_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    status_change ENUM('join', 'leave') NOT NULL COMMENT '状态变更类型',
+    reason TEXT COMMENT '离职原因',
+    change_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '变更时间',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employee_id) REFERENCES employees(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
