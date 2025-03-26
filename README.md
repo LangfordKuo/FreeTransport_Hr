@@ -37,6 +37,8 @@
 - 启用PHP PDO扩展
 
 ### 初始登录
+- 首次登录请修改config中的db_config.php文件，修改数据库连接
+- 首次使用请访问install.php写入数据库，写入成功后请删除install.php防止出现安全问题。
 - 默认超级管理员账号：admin
 - 默认密码：admin
 - **请在首次登录后立即修改密码！**

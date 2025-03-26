@@ -1,9 +1,9 @@
 <?php
 $db_config = [
     'host' => 'localhost',
-    'username' => 'frt_hr',
-    'password' => 'tEJz6RJachsfH9ep',
-    'database' => 'frt_hr'
+    'username' => '数据库用户名',
+    'password' => '数据库密码',
+    'database' => '数据库名'
 ];
 
 $conn = new mysqli($db_config['host'], $db_config['username'], $db_config['password'], $db_config['database']);
