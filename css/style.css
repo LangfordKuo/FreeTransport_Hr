@@ -173,3 +173,41 @@ body {
     width: auto;
     min-width: 120px;
 }
+
+/* 分页样式 */
+.pagination-container {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.pagination-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.pagination-buttons .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 3px 6px rgba(44, 62, 80, 0.1);
+}
+
+.pagination-buttons .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(44, 62, 80, 0.15);
+}
+
+.page-info {
+    color: var(--primary-color);
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    border: 1px solid rgba(52, 152, 219, 0.2);
+    box-shadow: 0 2px 4px rgba(44, 62, 80, 0.05);
+}

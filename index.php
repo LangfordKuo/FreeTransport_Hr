@@ -3,17 +3,39 @@ require_once 'config/auth.php';
 require_role(['user', 'admin', 'superadmin']);
 require_once 'config/db_config.php';
 
-// 获取所有在职员工
+// 获取当前页码 - 在职员工
+$active_page = isset($_GET['active_page']) ? max(1, intval($_GET['active_page'])) : 1;
+$items_per_page = 5;
+$active_offset = ($active_page - 1) * $items_per_page;
+
+// 获取当前页码 - 离职员工
+$inactive_page = isset($_GET['inactive_page']) ? max(1, intval($_GET['inactive_page'])) : 1;
+$inactive_offset = ($inactive_page - 1) * $items_per_page;
+
+// 获取在职员工总数
+$active_total_result = $conn->query("SELECT COUNT(*) as total FROM employees WHERE status = 'active'");
+$active_total_row = $active_total_result->fetch_assoc();
+$active_total_employees = $active_total_row['total'];
+$active_total_pages = ceil($active_total_employees / $items_per_page);
+
+// 获取离职员工总数
+$inactive_total_result = $conn->query("SELECT COUNT(*) as total FROM employees WHERE status = 'inactive'");
+$inactive_total_row = $inactive_total_result->fetch_assoc();
+$inactive_total_employees = $inactive_total_row['total'];
+$inactive_total_pages = ceil($inactive_total_employees / $items_per_page);
+
+// 获取当前页的在职员工
 $active_employees = $conn->query("SELECT e.*, u.nickname as created_by_nickname 
 FROM employees e 
 LEFT JOIN users u ON e.created_by = u.id 
 WHERE e.status = 'active' 
-ORDER BY e.employee_number DESC");
+ORDER BY e.employee_number DESC 
+LIMIT $items_per_page OFFSET $active_offset");
 if ($active_employees === false) {
     die("Error executing query: " . $conn->error);
 }
 
-// 获取所有离职员工（只显示最新的离职记录）
+// 获取当前页的离职员工
 $inactive_employees = $conn->query("SELECT e.*, l.reason, l.change_date as leave_date, u.nickname as operated_by_nickname 
 FROM employees e 
 JOIN (
@@ -25,7 +47,8 @@ JOIN (
 JOIN employee_status_logs l ON e.id = l.employee_id AND l.change_date = latest.latest_leave_date
 LEFT JOIN users u ON l.operated_by = u.id
 WHERE e.status = 'inactive' AND l.status_change = 'leave' 
-ORDER BY e.employee_number DESC");
+ORDER BY leave_date DESC
+LIMIT $items_per_page OFFSET $inactive_offset");
 if ($inactive_employees === false) {
     die("Error executing query: " . $conn->error);
 }
@@ -109,6 +132,28 @@ if ($inactive_employees === false) {
                         </tbody>
                     </table>
                 </div>
+                <!-- 分页导航 - 在职员工 -->
+                <div class="pagination-container">
+                    <nav aria-label="Page navigation">
+                        <div class="pagination-buttons">
+                            <?php if ($active_page > 1): ?>
+                            <a href="?active_page=<?php echo ($active_page - 1); ?><?php echo isset($_GET['inactive_page']) ? '&inactive_page='.$_GET['inactive_page'] : ''; ?>" class="btn btn-primary">
+                                <i class="fas fa-chevron-left"></i> 上一页
+                            </a>
+                            <?php endif; ?>
+                            
+                            <span class="page-info">
+                                <i class="fas fa-file-alt"></i> 第 <?php echo $active_page; ?> 页 / 共 <?php echo $active_total_pages; ?> 页
+                            </span>
+                            
+                            <?php if ($active_page < $active_total_pages): ?>
+                            <a href="?active_page=<?php echo ($active_page + 1); ?><?php echo isset($_GET['inactive_page']) ? '&inactive_page='.$_GET['inactive_page'] : ''; ?>" class="btn btn-primary">
+                                下一页 <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <?php endif; ?>
+                        </div>
+                    </nav>
+                </div>
             </div>
             
             <!-- 离职员工列表 -->
@@ -156,6 +201,28 @@ if ($inactive_employees === false) {
                             <?php endwhile; ?>
                         </tbody>
                     </table>
+                </div>
+                <!-- 分页导航 - 离职员工 -->
+                <div class="pagination-container">
+                    <nav aria-label="Page navigation">
+                        <div class="pagination-buttons">
+                            <?php if ($inactive_page > 1): ?>
+                            <a href="?inactive_page=<?php echo ($inactive_page - 1); ?><?php echo isset($_GET['active_page']) ? '&active_page='.$_GET['active_page'] : ''; ?>" class="btn btn-primary">
+                                <i class="fas fa-chevron-left"></i> 上一页
+                            </a>
+                            <?php endif; ?>
+                            
+                            <span class="page-info">
+                                <i class="fas fa-file-alt"></i> 第 <?php echo $inactive_page; ?> 页 / 共 <?php echo $inactive_total_pages; ?> 页
+                            </span>
+                            
+                            <?php if ($inactive_page < $inactive_total_pages): ?>
+                            <a href="?inactive_page=<?php echo ($inactive_page + 1); ?><?php echo isset($_GET['active_page']) ? '&active_page='.$_GET['active_page'] : ''; ?>" class="btn btn-primary">
+                                下一页 <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <?php endif; ?>
+                        </div>
+                    </nav>
                 </div>
             </div>
         </div>
