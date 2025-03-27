@@ -27,20 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // 如果填写了员工编号，验证格式
-        if (formData.employee_number) {
-            // 验证是否为纯数字
-            if (!/^\d+$/.test(formData.employee_number)) {
-                showError('员工编号必须是纯数字');
-                return;
-            }
-            
-            // 验证数字范围
-            const numValue = parseInt(formData.employee_number);
-            if (numValue <= 0) {
-                showError('员工编号必须大于0');
-                return;
-            }
+        // 验证员工编号格式（如果填写了的话）
+        if (formData.employee_number && (!/^\d+$/.test(formData.employee_number) || parseInt(formData.employee_number) < 0)) {
+            showError('员工编号必须为0或0以上的整数');
+            return;
         }
 
         try {

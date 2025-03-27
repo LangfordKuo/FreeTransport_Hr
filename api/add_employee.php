@@ -18,6 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
+    // 如果提供了员工编号，验证格式
+    if (!empty($employee_number)) {
+        if (!is_numeric($employee_number) || intval($employee_number) < 0) {
+            echo json_encode([
+                'success' => false,
+                'message' => '员工编号必须为0或正整数'
+            ]);
+            exit;
+        }
+    }
+    
     // 如果没有提供员工编号，自动分配一个最小的空闲编号
     if (empty($employee_number)) {
         // 获取所有已使用的编号
