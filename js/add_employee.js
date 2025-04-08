@@ -1,6 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('add-employee-form');
     const errorMessages = document.getElementById('error-messages');
+    const generateNumberBtn = document.getElementById('generate-number');
+    const employeeNumberInput = document.getElementById('employee_number');
+
+    function showError(message) {
+        errorMessages.textContent = message;
+        errorMessages.style.display = 'block';
+    }
+
+    // 处理生成编号按钮点击
+    generateNumberBtn.addEventListener('click', async function() {
+        try {
+            const response = await fetch('api/generate_number.php');
+            const data = await response.json();
+
+            if (data.success) {
+                employeeNumberInput.value = data.number;
+            } else {
+                showError(data.message || '生成编号失败');
+            }
+        } catch (error) {
+            showError('系统错误，请稍后重试');
+            console.error('Error:', error);
+        }
+    });
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -57,9 +81,4 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         }
     });
-
-    function showError(message) {
-        errorMessages.textContent = message;
-        errorMessages.style.display = 'block';
-    }
 });

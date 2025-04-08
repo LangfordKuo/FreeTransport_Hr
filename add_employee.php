@@ -45,7 +45,7 @@
                     <label class="form-label" for="employee_number">员工编号</label>
                     <input type="text" id="employee_number" name="employee_number" class="form-control">
                     <div class="form-info">
-                        <i class="fas fa-info-circle"></i> 可选填，留空将自动分配最小的空闲编号
+                        <i class="fas fa-info-circle"></i> 点击页面下方的生成编号按钮自动获取最小可用编号
                     </div>
                 </div>
                 
@@ -64,9 +64,14 @@
                     <input type="text" id="truckers_mp_id" name="truckers_mp_id" class="form-control" required>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-plus-circle"></i> 添加员工
-                </button>
+                <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> 添加员工
+                    </button>
+                    <button type="button" id="generate-number" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i> 生成编号
+                    </button>
+                </div>
             </form>
         </div>
     </div>
