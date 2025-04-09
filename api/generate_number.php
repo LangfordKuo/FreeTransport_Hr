@@ -29,16 +29,14 @@ try {
         $used_numbers[] = intval($row['employee_number']);
     }
 
-    // 找到最小的未使用编号
-    $new_number = 1;
+    // 找到最小的未使用编号，从20开始
+    $new_number = 20;
     while (in_array($new_number, $used_numbers)) {
         $new_number++;
     }
 
-    // 如果编号小于100，补零
-    if ($new_number < 100) {
-        $new_number = sprintf("%03d", $new_number);
-    }
+    // 补零到3位
+    $new_number = sprintf("%03d", $new_number);
 
     echo json_encode(['success' => true, 'number' => $new_number]);
 } catch (Exception $e) {
