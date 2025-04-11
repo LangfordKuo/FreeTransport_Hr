@@ -90,9 +90,18 @@ if ($inactive_employees === false) {
             
             <!-- 在职员工列表 -->
             <div class="glass-card">
-                <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">
-                    <i class="fas fa-user-tie"></i> 在职员工
-                </h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="color: var(--primary-color);">
+                        <i class="fas fa-user-tie"></i> 在职员工
+                    </h2>
+                    <span style="color: var(--primary-color); font-size: 1.2em;">
+                        <i class="fas fa-users"></i> 员工总数：<?php 
+                            $result = $conn->query("SELECT COUNT(*) as total FROM employees WHERE status = 'active'");
+                            $row = $result->fetch_assoc();
+                            echo $row['total'];
+                        ?>
+                    </span>
+                </div>
                 <div style="overflow-x: auto;">
                     <table class="table">
                         <thead>
